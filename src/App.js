@@ -5,8 +5,8 @@ function App() {
   return (
     <div className="App">
       <Router />
-    </div> 
-  )
+    </div>
+  );
 }
 
 export default App;
