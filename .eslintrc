@@ -1,18 +1,17 @@
 {
-  "env":{
+  "env": {
     "browser": true,
     "node": true,
-    "es6": true
+    "es6": true,
   },
   "parserOptions": {
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
   },
   "rules": {
-    // "no-console": ["error"],
-    // "indent": ["error", 2]
+    "no-console": ["error"],
+    "indent": ["error", 2],
     "linebreak-style": ["off"],
-    "no-unused-vars": ["off"]
+    "no-unused-vars": ["off"],
   },
-  "extends": ["airbnb-base"]
 }
