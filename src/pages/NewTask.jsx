@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import moment from 'moment';
 import { url } from '../const';
 import { Header } from '../components/Header';
 import './newTask.scss';
@@ -9,11 +10,21 @@ import { useHistory } from 'react-router-dom';
 export const NewTask = () => {
   const [selectListId, setSelectListId] = useState();
   const [lists, setLists] = useState([]);
+  const [limit, setLimit] = useState();
   const [title, setTitle] = useState('');
   const [detail, setDetail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [cookies] = useCookies();
   const history = useHistory();
+
+  const handleLimitChange = (e) => {
+    const localDateTime = e.target.value; // ここでは"YYYY-MM-DDTHH:MM"の形式
+    // ローカルタイムゾーンの日時をMomentオブジェクトとする
+    const momentObj = moment(localDateTime);
+    // UTCに変換し、指定の形式で文字列化
+    const utcDateTime = momentObj.utc().format('YYYY-MM-DDTHH:mm:ss') + 'Z';
+    setLimit(utcDateTime);
+  };
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
   const handleSelectList = (id) => setSelectListId(id);
@@ -22,7 +33,10 @@ export const NewTask = () => {
       title: title,
       detail: detail,
       done: false,
+      limit: limit,
     };
+
+    console.log(data);
 
     axios
       .post(`${url}/lists/${selectListId}/tasks`, data, {
@@ -73,6 +87,10 @@ export const NewTask = () => {
               </option>
             ))}
           </select>
+          <br />
+          <label>期限</label>
+          <br />
+          <input type="datetime-local" onChange={handleLimitChange} />
           <br />
           <label>タイトル</label>
           <br />
