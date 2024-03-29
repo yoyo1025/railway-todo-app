@@ -18,13 +18,18 @@
   },
   "devDependencies": {
     "eslint": "^8.57.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "prettier": "^3.2.5",
     "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src/App.js",
+    "fix": "eslint --fix ./src/App.js"
   },
   "eslintConfig": {
     "extends": [
