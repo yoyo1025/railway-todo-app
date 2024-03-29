@@ -19,12 +19,10 @@ export const EditTask = () => {
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
   const handleLimitChange = (e) => {
-    const localDateTime = e.target.value; // ここでは"YYYY-MM-DDTHH:MM"の形式
-    // ローカルタイムゾーンの日時をMomentオブジェクトとする
-    const momentObj = moment(localDateTime);
-    // UTCに変換し、指定の形式で文字列化
-    const utcDateTime = momentObj.utc().format('YYYY-MM-DDTHH:mm:ss') + 'Z';
-    setLimit(utcDateTime + 9);
+    const localDateTime = e.target.value; // "YYYY-MM-DDTHH:MM"の形式
+    const utcDateTime =
+      moment.utc(localDateTime).format('YYYY-MM-DDTHH:mm:ss') + 'Z';
+    setLimit(utcDateTime);
   };
   const handleIsDoneChange = (e) => setIsDone(e.target.value === 'done');
   const onUpdateTask = () => {

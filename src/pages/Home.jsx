@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import moment from 'moment';
 import { Header } from '../components/Header';
 import { url } from '../const';
 import './home.scss';
@@ -125,6 +126,26 @@ export const Home = () => {
 // 表示するタスク
 const Tasks = (props) => {
   const { tasks, selectListId, isDoneDisplay } = props;
+  const now = moment().format();
+
+  function getDiff(a) {
+    let b = parseInt(a, 10);
+    let day = 0,
+      hour = 0,
+      minute = 0;
+    if (b >= 1440) {
+      day = Math.floor(b / 1440);
+      b = b % 1440;
+    }
+    if (b >= 60) {
+      hour = Math.floor(b / 60);
+      b = b % 60;
+    }
+    minute = b;
+
+    return `　　残り${day > 0 ? day + '日と' : ''}${hour > 0 ? hour + '時間' : ''}${minute}分`;
+  }
+
   if (tasks === null) return <></>;
 
   if (isDoneDisplay == 'done') {
@@ -141,6 +162,10 @@ const Tasks = (props) => {
                 className="task-item-link"
               >
                 {task.title}
+                {`　　　期限：${moment(task.limit).format('YYYY-MM-DD-HH-MM')}`}
+                {getDiff(
+                  `${moment(task.limit).subtract(9, 'hours').diff(now, 'minute')}`,
+                )}
                 <br />
                 {task.done ? '完了' : '未完了'}
               </Link>
@@ -163,7 +188,10 @@ const Tasks = (props) => {
               className="task-item-link"
             >
               {task.title}
-              {task.limit}
+              {`　　　期限：${moment(task.limit).format('YYYY-MM-DD-HH-MM')}`}
+              {getDiff(
+                `${moment(task.limit).subtract(9, 'hours').diff(now, 'minute')}`,
+              )}
               <br />
               {task.done ? '完了' : '未完了'}
             </Link>
