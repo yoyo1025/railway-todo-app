@@ -100,7 +100,7 @@ export const Home = () => {
             </div>
           </div>
           <ul className="list-tab" onKeyDown={handleKeyDown}>
-            {lists.map((list, index) => {
+            {lists.map((list) => {
               const isActive = list.id === selectListId;
               return (
                 <li
@@ -109,7 +109,7 @@ export const Home = () => {
                   tabIndex="0"
                   onClick={() => handleSelectList(list.id)}
                   role="button"
-                  aria-pressed={isActive ? 'true' : 'false'}
+                  aria-pressed={isActive ? 'true' : 'false'} // スクリーンリーダーで読み上げられるらしい
                 >
                   {list.title}
                 </li>
