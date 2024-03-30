@@ -8,7 +8,7 @@ import { url } from '../const';
 import './home.scss';
 
 export const Home = () => {
-  const [isDoneDisplay, setIsDoneDisplay] = useState('todo'); // todo->未完了 done->完了
+  const [isDoneDisplay, setIsDoneDisplay] = useState('todo');
   const [lists, setLists] = useState([]);
   const [selectListId, setSelectListId] = useState();
   const [tasks, setTasks] = useState([]);
@@ -64,6 +64,22 @@ export const Home = () => {
         setErrorMessage(`タスクの取得に失敗しました。${err}`);
       });
   };
+
+  const handleKeyDown = (e) => {
+    const currentIndex = lists.findIndex((list) => list.id === selectListId);
+    let newIndex = currentIndex;
+
+    if (e.key === 'ArrowRight') {
+      // 右矢印キーが押された場合
+      newIndex = (currentIndex + 1) % lists.length;
+    } else if (e.key === 'ArrowLeft') {
+      // 左矢印キーが押された場合
+      newIndex = (currentIndex - 1 + lists.length) % lists.length;
+    }
+    const newListId = lists[newIndex].id;
+    handleSelectList(newListId);
+  };
+
   return (
     <div>
       <Header />
@@ -83,20 +99,24 @@ export const Home = () => {
               </p>
             </div>
           </div>
-          <ul className="list-tab">
-            {lists.map((list, key) => {
+          <ul className="list-tab" onKeyDown={handleKeyDown}>
+            {lists.map((list, index) => {
               const isActive = list.id === selectListId;
               return (
                 <li
-                  key={key}
+                  key={list.id}
                   className={`list-tab-item ${isActive ? 'active' : ''}`}
+                  tabIndex="0"
                   onClick={() => handleSelectList(list.id)}
+                  role="button"
+                  aria-pressed={isActive ? 'true' : 'false'}
                 >
                   {list.title}
                 </li>
               );
             })}
           </ul>
+
           <div className="tasks">
             <div className="tasks-header">
               <h2>タスク一覧</h2>
@@ -123,7 +143,6 @@ export const Home = () => {
   );
 };
 
-// 表示するタスク
 const Tasks = (props) => {
   const { tasks, selectListId, isDoneDisplay } = props;
   const now = moment().format();
@@ -162,7 +181,7 @@ const Tasks = (props) => {
                 className="task-item-link"
               >
                 {task.title}
-                {`　　　期限：${moment(task.limit).format('YYYY-MM-DD-HH-MM')}`}
+                {`　　　期限：${moment(task.limit).subtract(9, 'hours').format('YYYY-MM-DD-HH-MM')}`}
                 {getDiff(
                   `${moment(task.limit).subtract(9, 'hours').diff(now, 'minute')}`,
                 )}
@@ -188,7 +207,7 @@ const Tasks = (props) => {
               className="task-item-link"
             >
               {task.title}
-              {`　　　期限：${moment(task.limit).format('YYYY-MM-DD-HH-MM')}`}
+              {`　　　期限：${moment(task.limit).subtract(9, 'hours').format('YYYY-MM-DD-HH-MM')}`}
               {getDiff(
                 `${moment(task.limit).subtract(9, 'hours').diff(now, 'minute')}`,
               )}
